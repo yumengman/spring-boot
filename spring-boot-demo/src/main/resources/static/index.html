@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body onload="onLoadPage();">
+<h1>Hello Word!!!!</h1>
+</body>
+
+<script src="/spring-boot-demo/jquery.min.js"></script>
+<script>
+    //关闭WebSocket连接
+    function onLoadPage() {
+        $.ajax({
+            url:'/spring-boot-demo/user/user/userpage',
+            type: 'POST',
+            dataType: 'json',
+            success : function(data) {
+                console.log('data:' + data)
+            },
+            error : function() {
+                console.error('网络错误');
+            }
+        });
+    }
+
+</script>
+</html>

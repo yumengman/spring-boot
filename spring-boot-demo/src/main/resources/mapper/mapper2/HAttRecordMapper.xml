@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.example.demoDao.mapper2.HAttRecordMapper" >
+  <resultMap id="BaseResultMap" type="com.example.demoEntity.HAttRecord" >
+    <id column="uuid" property="uuid" jdbcType="INTEGER" />
+    <result column="worknum" property="worknum" jdbcType="VARCHAR" />
+    <result column="staffname" property="staffname" jdbcType="VARCHAR" />
+    <result column="timecardid" property="timecardid" jdbcType="VARCHAR" />
+    <result column="cdatetime" property="cdatetime" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="limit"><if test="rows != null and rows != ''">   	limit #{start},#{rows}  	</if></sql>
+  <select id="getHAttRecordList" resultMap="BaseResultMap">
+    SELECT uuid,worknum,staffname,timecardid,cdatetime FROM `h_att_record` WHERE 1=1
+  </select>
+
+</mapper>

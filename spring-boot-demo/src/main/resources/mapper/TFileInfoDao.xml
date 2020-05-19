@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ymm.dao.TFileInfoDao">
+
+    <resultMap type="com.ymm.entity.TFileInfo" id="TFileInfoMap">
+        <result property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="fileName" column="file_name" jdbcType="VARCHAR"/>
+        <result property="filePath" column="file_path" jdbcType="VARCHAR"/>
+        <result property="isUsed" column="is_used" jdbcType="INTEGER"/>
+        <result property="isDelete" column="is_delete" jdbcType="INTEGER"/>
+        <result property="creatorid" column="creatorid" jdbcType="VARCHAR"/>
+        <result property="createtime" column="createtime" jdbcType="TIMESTAMP"/>
+        <result property="lastupdateuserid" column="lastupdateuserid" jdbcType="VARCHAR"/>
+        <result property="lastupdatetime" column="lastupdatetime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, file_name, file_path, is_used, is_delete, creatorid, createtime, lastupdateuserid, lastupdatetime  </sql>
+    <!--查询单个-->
+    <select id="queryById" resultMap="TFileInfoMap">
+        select
+          <include refid="Base_Column_List" />
+        from test.t_file_info
+        where id = #{id}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="TFileInfoMap">
+        select
+          <include refid="Base_Column_List" />
+        from test.t_file_info
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="TFileInfoMap">
+        select
+         <include refid="Base_Column_List" />
+        from test.t_file_info
+        <where> 1=1
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id" useGeneratedKeys="true">
+        insert into test.t_file_info
+         <trim prefix="(" suffix=")" suffixOverrides="," >
+          <if test="fileName != null and fileName != ''">
+                file_name,
+          </if>
+          <if test="filePath != null and filePath != ''">
+                file_path,
+          </if>
+          <if test="isUsed != null">
+                is_used,
+          </if>
+          <if test="isDelete != null">
+                is_delete,
+          </if>
+          <if test="creatorid != null and creatorid != ''">
+                creatorid,
+          </if>
+          <if test="createtime != null">
+                createtime,
+          </if>
+          <if test="lastupdateuserid != null and lastupdateuserid != ''">
+                lastupdateuserid,
+          </if>
+          <if test="lastupdatetime != null">
+                lastupdatetime,
+          </if>
+          </trim>           
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="fileName != null and fileName != ''">
+                file_name = #{fileName},
+            </if>
+            <if test="filePath != null and filePath != ''">
+                file_path = #{filePath},
+            </if>
+            <if test="isUsed != null">
+                is_used = #{isUsed},
+            </if>
+            <if test="isDelete != null">
+                is_delete = #{isDelete},
+            </if>
+            <if test="creatorid != null and creatorid != ''">
+                creatorid = #{creatorid},
+            </if>
+            <if test="createtime != null">
+                createtime = #{createtime},
+            </if>
+            <if test="lastupdateuserid != null and lastupdateuserid != ''">
+                lastupdateuserid = #{lastupdateuserid},
+            </if>
+            <if test="lastupdatetime != null">
+                lastupdatetime = #{lastupdatetime},
+            </if>
+        </trim> 
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update test.t_file_info
+        <set>
+            <if test="fileName != null and fileName != ''">
+                file_name = #{fileName},
+            </if>
+            <if test="filePath != null and filePath != ''">
+                file_path = #{filePath},
+            </if>
+            <if test="isUsed != null">
+                is_used = #{isUsed},
+            </if>
+            <if test="isDelete != null">
+                is_delete = #{isDelete},
+            </if>
+            <if test="creatorid != null and creatorid != ''">
+                creatorid = #{creatorid},
+            </if>
+            <if test="createtime != null">
+                createtime = #{createtime},
+            </if>
+            <if test="lastupdateuserid != null and lastupdateuserid != ''">
+                lastupdateuserid = #{lastupdateuserid},
+            </if>
+            <if test="lastupdatetime != null">
+                lastupdatetime = #{lastupdatetime},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+</mapper>

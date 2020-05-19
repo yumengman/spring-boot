@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>User 页面</h1>
+<h3>亚马逊登录</h3>
+<form id="form-login">
+    <div class="form-group">
+        <input name="login_id" id="login_id" type="text"
+               class="form-control" placeholder="ID" required="">
+    </div>
+    <div class="form-group">
+        <input name="loginname" id="loginname" type="text"
+               class="form-control" placeholder="姓名" required="">
+    </div>
+    <button type="button" id="login" class="btn btn-primary block full-width">页面跳转</button>
+    <button type="button" id="login2" class="btn btn-primary block full-width">查询</button>
+</form>
+    <a onclick="loadWebSocket();">点击初始化webSocket</a>
+    <hr/>
+        Welcome<br/><input id="text" type="text"/>
+    <button onclick="send()">发送消息</button>
+    <hr/>
+    <button onclick="closeWebSocket();">关闭WebSocket连接</button>
+    <hr/>
+    <div id="message"></div>
+    <h1>批量文件上传</h1>
+<form enctype="multipart/form-data" method="post" action="/spring-boot-demo/user/fileUpload">
+    <input type="file" name="file" value="文件1"/>
+    <input type="file" name="file" value="文件2"/>
+    <input type="file" name="file" value="文件3"/>
+    <input type="submit" value="上传"/>
+</form>
+<img width="100px;" height="80px" src="
+https://oss-ymm.oss-cn-beijing.aliyuncs.com/21cc5bc2-2d38-47cc-adfc-4e47894dcefc.jpg?Expires=1585627583&OSSAccessKeyId=TMP.3KiwQTGjPmQ3wfBGkVZm8tcGmAxoJeRn5AC3Ao63W1EF3f9fEgjJZd5AnXcWtGu2YZcUnVpzxLHu4yNTHegCsAjTKwwFBS&Signature=StxyGUXe3%2FLNDF39A28S%2FDXbxEg%3D">
+<div>
+    <input id="login3" type="button" value="新增"/>
+</div>
+<div>
+    <h1><input id="login4" type="button" value="企业微信推送消息"/></h1>
+</div>
+</body>
+<script src="/spring-boot-demo/jquery.min.js"></script>
+<script src="/spring-boot-demo/bootbox.js"></script>
+<script src="/spring-boot-demo/jquery.validate.min.js"></script>
+<script src="/spring-boot-demo/messages_zh.js"></script>
+<script>
+    $('#login').click(function() {
+        var login_id = $('#login_id').val();
+        var password = $('#password').val();
+        $.ajax({
+            url:'/spring-boot-demo/user/user/userpage',
+            type: 'POST',
+            dataType: 'json',
+            data: {login_id:login_id},
+            success : function(data) {
+                if (data != null) {
+                    if (data.returnCode != 0) {
+                        alert(data.returnMsg);
+                    } else {
+                        alert(data.returnMsg);
+                    }
+                }
+            },
+            error : function() {
+                toastr.error('网络错误');
+            }
+        });
+    });
+    $('#login2').click(function() {
+        var login_id = $('#login_id').val();
+        var loginname = $('#loginname').val();
+        $.ajax({
+            url:'/spring-boot-demo/user/user/user',
+            type: 'POST',
+            dataType: 'json',
+            data: {login_id:login_id,loginname:loginname},
+            success : function(data) {
+                if (data != null) {
+                    if (data.returnCode != 0) {
+                        alert(data.returnMsg);
+                    } else {
+                        alert(data.returnMsg);
+                    }
+                }
+            },
+            error : function() {
+                toastr.error('网络错误');
+            }
+        });
+    });
+    $('#login3').click(function() {
+        var price = "100";
+        var goodsName = '{"min":"1","max":"12"}';
+        var datas = {
+            price: price,
+            goodsName: goodsName
+        }
+        $.ajax({
+            url:'/spring-boot-demo/user/user/insertGoods',
+            type: 'POST',
+            dataType: 'json',
+            data: datas,
+            success : function(data) {
+                if (data != null) {
+                    if (data.returnCode != 0) {
+                        alert(data.returnMsg);
+                    } else {
+                        alert(data.returnMsg);
+                    }
+                }
+            },
+            error : function() {
+                toastr.error('网络错误');
+            }
+        });
+    });
+
+    $('#login4').click(function() {
+        var datas = {
+            "msgtype": "text",
+            "content": {
+                "text": "下班打卡",
+                "mentioned_list":["@all"],
+                "mentioned_mobile_list":["18537757128","@all"]
+            }
+        }
+        $.ajax({
+            url:'https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=718db2e4-8e99-46f2-92ce-2b8b9af826cc',
+            type: 'POST',
+            dataType: 'json',
+            data: datas,
+            success : function(data) {
+                if (data != null) {
+                    if (data.returnCode != 0) {
+                        alert(data.returnMsg);
+                    } else {
+                        alert(data.returnMsg);
+                    }
+                }
+            },
+            error : function(e) {
+                toastr.error('网络错误');
+            }
+        });
+    });
+
+    // 加载webSocket
+    function loadWebSocket() {
+        var websocket = null;
+        if ('WebSocket' in window) {
+            var randomNum6 = Math.round(Math.random() * 10000);
+            websocket = new WebSocket("ws://localhost:8002/spring-boot-demo/websockets/"+randomNum6);
+        } else {
+            alert('当前浏览器 Not support websocket')
+        }
+        //连接发生错误的回调方法
+        websocket.onerror = function () {
+            setMessageInnerHTML("WebSocket连接发生错误");
+        };
+
+        //连接成功建立的回调方法
+        websocket.onopen = function () {
+            setMessageInnerHTML("WebSocket连接成功");
+        }
+
+        //接收到消息的回调方法
+        websocket.onmessage = function (event) {
+            setMessageInnerHTML(event.data);
+        }
+
+        //连接关闭的回调方法
+        websocket.onclose = function () {
+            setMessageInnerHTML("WebSocket连接关闭");
+        }
+
+        //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+        window.onbeforeunload = function () {
+            closeWebSocket();
+        }
+
+        //将消息显示在网页上
+        function setMessageInnerHTML(innerHTML) {
+            document.getElementById('message').innerHTML += innerHTML + '<br/>';
+        }
+
+        //关闭WebSocket连接
+        function closeWebSocket() {
+            websocket.close();
+        }
+
+        //发送消息
+        function send() {
+            var message = document.getElementById('text').value;
+            websocket.send(message);
+        }
+    }
+</script>
+</html>
